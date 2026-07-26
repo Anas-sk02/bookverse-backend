@@ -3,6 +3,8 @@ package com.bookverse.controller;
 import com.bookverse.entity.Book;
 import com.bookverse.service.BookService;
 import org.springframework.web.bind.annotation.*;
+import com.bookverse.dto.BookRequestDto;
+import com.bookverse.dto.BookResponseDto;
 
 import java.util.List;
 
@@ -17,30 +19,26 @@ public class BookController {
     }
 
     @GetMapping
-    public List<Book> getAllBooks() {
+    public List<BookResponseDto> getAllBooks() {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable Long id) {
-
+    public BookResponseDto getBookById(@PathVariable Long id) {
         return bookService.getBookById(id);
-
     }
 
     @PostMapping
-    public Book saveBook(@RequestBody Book book) {
-
-        return bookService.saveBook(book);
-
+    public BookResponseDto saveBook(@RequestBody BookRequestDto dto) {
+        return bookService.saveBook(dto);
     }
 
 
     @PutMapping("/{id}")
-    public Book updateBook(@PathVariable Long id,
-                           @RequestBody Book book) {
+    public BookResponseDto updateBook(@PathVariable Long id,
+                                      @RequestBody BookRequestDto dto) {
 
-        return bookService.updateBook(id, book);
+        return bookService.updateBook(id, dto);
     }
 
 

@@ -1,20 +1,19 @@
 package com.bookverse.service;
 
-import com.bookverse.entity.Book;
+import com.bookverse.dto.BookRequestDto;
+import com.bookverse.dto.BookResponseDto;
 
 import java.util.List;
 
 public interface BookService {
 
-    List<Book> getAllBooks();
+    List<BookResponseDto> getAllBooks();
 
-    // next
-    Book getBookById(Long id);
+    BookResponseDto getBookById(Long id);
 
-    Book saveBook(Book book);
+    BookResponseDto saveBook(BookRequestDto dto);
 
-    Book updateBook(Long id, Book book);
+    BookResponseDto updateBook(Long id, BookRequestDto dto);
 
     void deleteBook(Long id);
-
 }

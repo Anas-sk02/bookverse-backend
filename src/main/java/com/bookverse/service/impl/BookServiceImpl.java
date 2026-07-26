@@ -1,66 +1,98 @@
 package com.bookverse.service.impl;
 
+import com.bookverse.dto.BookRequestDto;
+import com.bookverse.dto.BookResponseDto;
+import com.bookverse.entity.Author;
 import com.bookverse.entity.Book;
+import com.bookverse.entity.Category;
+import com.bookverse.mapper.BookMapper;
+import com.bookverse.repository.AuthorRepository;
 import com.bookverse.repository.BookRepository;
+import com.bookverse.repository.CategoryRepository;
 import com.bookverse.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final CategoryRepository categoryRepository;
 
-    public BookServiceImpl(BookRepository bookRepository) {
+    public BookServiceImpl(BookRepository bookRepository,
+                           AuthorRepository authorRepository,
+                           CategoryRepository categoryRepository) {
+
         this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public List<BookResponseDto> getAllBooks() {
+
+        return bookRepository.findAll()
+                .stream()
+                .map(BookMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Book getBookById(Long id) {
+    public BookResponseDto getBookById(Long id) {
 
-        return bookRepository.findById(id).orElse(null);
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
 
+        return BookMapper.toDto(book);
     }
 
     @Override
-    public Book saveBook(Book book) {
+    public BookResponseDto saveBook(BookRequestDto dto) {
 
-        return bookRepository.save(book);
+        Author author = authorRepository.findById(dto.getAuthorId())
+                .orElseThrow(() -> new RuntimeException("Author not found"));
 
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        Book book = BookMapper.toEntity(dto, author, category);
+
+        Book savedBook = bookRepository.save(book);
+
+        return BookMapper.toDto(savedBook);
     }
 
     @Override
-    public Book updateBook(Long id, Book updatedBook) {
+    public BookResponseDto updateBook(Long id, BookRequestDto dto) {
 
-        Book existingBook = bookRepository.findById(id).orElse(null);
+        Book existingBook = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
 
-        if (existingBook == null) {
-            return null;
-        }
+        Author author = authorRepository.findById(dto.getAuthorId())
+                .orElseThrow(() -> new RuntimeException("Author not found"));
 
-        existingBook.setTitle(updatedBook.getTitle());
-        existingBook.setDescription(updatedBook.getDescription());
-        existingBook.setLanguage(updatedBook.getLanguage());
-        existingBook.setPages(updatedBook.getPages());
-        existingBook.setPublishedYear(updatedBook.getPublishedYear());
-        existingBook.setAuthor(updatedBook.getAuthor());
-        existingBook.setCategory(updatedBook.getCategory());
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        return bookRepository.save(existingBook);
+        existingBook.setTitle(dto.getTitle());
+        existingBook.setDescription(dto.getDescription());
+        existingBook.setLanguage(dto.getLanguage());
+        existingBook.setPages(dto.getPages());
+        existingBook.setPublishedYear(dto.getPublishedYear());
+        existingBook.setAuthor(author);
+        existingBook.setCategory(category);
+
+        Book updatedBook = bookRepository.save(existingBook);
+
+        return BookMapper.toDto(updatedBook);
     }
-
-
 
     @Override
     public void deleteBook(Long id) {
 
         bookRepository.deleteById(id);
-
     }
 }
