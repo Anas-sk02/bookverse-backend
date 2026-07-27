@@ -1,5 +1,6 @@
 package com.bookverse.service.impl;
 
+import com.bookverse.Exception.BookNotFoundException;
 import com.bookverse.dto.BookRequestDto;
 import com.bookverse.dto.BookResponseDto;
 import com.bookverse.entity.Author;
@@ -44,7 +45,7 @@ public class BookServiceImpl implements BookService {
     public BookResponseDto getBookById(Long id) {
 
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
 
         return BookMapper.toDto(book);
     }
@@ -69,7 +70,7 @@ public class BookServiceImpl implements BookService {
     public BookResponseDto updateBook(Long id, BookRequestDto dto) {
 
         Book existingBook = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException("Book not found with id: " + id));
 
         Author author = authorRepository.findById(dto.getAuthorId())
                 .orElseThrow(() -> new RuntimeException("Author not found"));
