@@ -1,21 +1,39 @@
 package com.bookverse.dto;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 public class BookRequestDto {
 
     // id nhi hai new book create karte waqt ID database generate karta hai
 
+    @NotBlank(message = "Title is required")
+    @Size(min = 2, max = 100, message = "Title must be between 2 and 100 characters")
     private String title;
 
+    @NotBlank(message = "Description is required")
+    @Size(min = 10, max = 1000, message = "Description must be between 10 and 1000 characters")
     private String description;
 
+    @NotBlank(message = "Language is required")
     private String language;
 
+    @NotNull(message = "Pages are required")
+    @Min(value = 1, message = "Pages must be greater than 0")
     private Integer pages;
 
+    @NotNull(message = "Published year is required")
+    @Min(value = 1900, message = "Published year must be greater than 1900")
+    @Max(value = 2100, message = "Published year must be less than 2100")
     private Integer publishedYear;
 
+    @NotNull(message = "Author is required")
     private Long authorId;
 
+    @NotNull(message = "Category is required")
     private Long categoryId;
 
     private String coverImage;

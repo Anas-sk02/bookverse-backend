@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.*;
 import com.bookverse.dto.BookRequestDto;
 import com.bookverse.dto.BookResponseDto;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -29,14 +31,14 @@ public class BookController {
     }
 
     @PostMapping
-    public BookResponseDto saveBook(@RequestBody BookRequestDto dto) {
+    public BookResponseDto saveBook(@Valid @RequestBody BookRequestDto dto) {
         return bookService.saveBook(dto);
     }
 
 
     @PutMapping("/{id}")
     public BookResponseDto updateBook(@PathVariable Long id,
-                                      @RequestBody BookRequestDto dto) {
+                                      @Valid @RequestBody BookRequestDto dto){
 
         return bookService.updateBook(id, dto);
     }
