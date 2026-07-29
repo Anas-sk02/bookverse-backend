@@ -4,10 +4,17 @@ import com.bookverse.dto.BookRequestDto;
 import com.bookverse.dto.BookResponseDto;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+
+
 
 public interface BookService {
 
-    List<BookResponseDto> getAllBooks();
+    Page<BookResponseDto> getAllBooks(
+            int page,
+            int size,
+            String sortBy,
+            String direction);
 
     BookResponseDto getBookById(Long id);
 

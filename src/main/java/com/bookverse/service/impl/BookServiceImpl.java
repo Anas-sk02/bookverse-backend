@@ -16,6 +16,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import org.springframework.data.domain.Sort;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -33,12 +42,21 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<BookResponseDto> getAllBooks() {
+    public Page<BookResponseDto> getAllBooks(
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
 
-        return bookRepository.findAll()
-                .stream()
-                .map(BookMapper::toDto)
-                .collect(Collectors.toList());
+        Sort sort = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<Book> books = bookRepository.findAll(pageable);
+
+        return books.map(BookMapper::toDto);
     }
 
     @Override

@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.*;
 import com.bookverse.dto.BookRequestDto;
 import com.bookverse.dto.BookResponseDto;
 
+
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import jakarta.validation.Valid;
 
 import java.util.List;
@@ -21,8 +25,13 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookResponseDto> getAllBooks() {
-        return bookService.getAllBooks();
+    public Page<BookResponseDto> getAllBooks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction) {
+
+        return bookService.getAllBooks(page, size, sortBy, direction);
     }
 
     @GetMapping("/{id}")
