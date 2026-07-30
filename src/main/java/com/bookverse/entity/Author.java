@@ -3,6 +3,11 @@ package com.bookverse.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+
 @Entity      //
 @Table(name = "authors")    //Database Table → Java Object Mapping ki.  ORM (Object Relational Mapping)
 public class Author {
@@ -19,6 +24,10 @@ public class Author {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "author")
+    @JsonIgnore
+    private List<Book> books;
 
     public Author() {
     }
@@ -49,5 +58,9 @@ public class Author {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 }

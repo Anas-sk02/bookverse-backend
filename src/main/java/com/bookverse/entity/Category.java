@@ -3,6 +3,9 @@ package com.bookverse.entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -16,6 +19,10 @@ public class Category {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
+    private List<Book> books;
 
     public Category() {
     }
@@ -38,5 +45,9 @@ public class Category {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 }
