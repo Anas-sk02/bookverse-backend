@@ -114,4 +114,15 @@ public class BookServiceImpl implements BookService {
 
         bookRepository.deleteById(id);
     }
+
+
+
+    @Override
+    public List<BookResponseDto> searchBooks(String keyword) {
+
+        return bookRepository.findByTitleContainingIgnoreCase(keyword)
+                .stream()
+                .map(BookMapper::toDto)
+                .toList();
+    }
 }

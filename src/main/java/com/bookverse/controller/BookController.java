@@ -52,11 +52,19 @@ public class BookController {
     }
 
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")                          //koi bhi id ke liye
     public void deleteBook(@PathVariable Long id) {
 
         bookService.deleteBook(id);
 
+    }
+
+
+    @GetMapping("/search")                //search api controller fir service fir repository DB then back
+    public List<BookResponseDto> searchBooks(
+            @RequestParam String keyword) {
+
+        return bookService.searchBooks(keyword);
     }
 
 }
