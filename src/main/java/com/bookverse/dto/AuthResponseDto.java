@@ -2,20 +2,22 @@ package com.bookverse.dto;
 
 public class AuthResponseDto {
 
-    private String message;
+//    private String message;
+
+    private String token;
 
     public AuthResponseDto() {
     }
 
-    public AuthResponseDto(String message) {
-        this.message = message;
+    public AuthResponseDto(String token) {
+        this.token = token;
     }
 
-    public String getMessage() {
-        return message;
+    public String getToken() {
+        return token;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
