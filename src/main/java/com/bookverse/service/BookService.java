@@ -6,6 +6,8 @@ import com.bookverse.dto.BookResponseDto;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
+import org.springframework.web.multipart.MultipartFile;
+
 
 
 public interface BookService {
@@ -27,4 +29,7 @@ public interface BookService {
 
 
     List<BookResponseDto> searchBooks(String keyword);
+
+
+    String uploadCoverImage(Long bookId, MultipartFile file);
 }

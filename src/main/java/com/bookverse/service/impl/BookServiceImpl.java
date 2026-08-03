@@ -25,20 +25,27 @@ import org.springframework.data.domain.Sort;
 
 import org.springframework.data.domain.Sort;
 
+import org.springframework.web.multipart.MultipartFile;
+import com.bookverse.service.FileStorageService;
+
 @Service
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
     private final CategoryRepository categoryRepository;
+    private final FileStorageService fileStorageService;
 
-    public BookServiceImpl(BookRepository bookRepository,
-                           AuthorRepository authorRepository,
-                           CategoryRepository categoryRepository) {
+    public BookServiceImpl(
+            BookRepository bookRepository,
+            AuthorRepository authorRepository,
+            CategoryRepository categoryRepository,
+            FileStorageService fileStorageService) {
 
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
         this.categoryRepository = categoryRepository;
+        this.fileStorageService = fileStorageService;
     }
 
     @Override
@@ -124,5 +131,23 @@ public class BookServiceImpl implements BookService {
                 .stream()
                 .map(BookMapper::toDto)
                 .toList();
+    }
+
+
+    @Override
+    public String uploadCoverImage(Long bookId, MultipartFile file) {
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new BookNotFoundException("Book not found with id: " + bookId));
+
+        String fileName =
+                fileStorageService.uploadCoverImage(file);
+
+        book.setCoverImage(fileName);
+
+        bookRepository.save(book);
+
+        return "Cover image uploaded successfully";
     }
 }

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.validation.Valid;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -65,6 +67,18 @@ public class BookController {
             @RequestParam String keyword) {
 
         return bookService.searchBooks(keyword);
+    }
+
+
+    @PostMapping("/{id}/cover")
+    public String uploadCoverImage(
+
+            @PathVariable Long id,
+
+            @RequestParam("file")
+            MultipartFile file){
+
+        return bookService.uploadCoverImage(id,file);
     }
 
 }
