@@ -32,4 +32,6 @@ public interface BookService {
 
 
     String uploadCoverImage(Long bookId, MultipartFile file);
+
+    String uploadPdf(Long bookId, MultipartFile file);
 }

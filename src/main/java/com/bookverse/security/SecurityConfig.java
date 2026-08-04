@@ -66,6 +66,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/books/*/cover")
                         .hasRole("ADMIN")
 
+                        .requestMatchers(HttpMethod.POST, "/books/*/pdf")
+                        .hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.PUT, "/books/**")
                         .hasRole("ADMIN")
 

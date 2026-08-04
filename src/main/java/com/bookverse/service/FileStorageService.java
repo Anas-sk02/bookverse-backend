@@ -6,4 +6,6 @@ public interface FileStorageService {
 
     String uploadCoverImage(MultipartFile file);
 
+    String uploadPdf(MultipartFile file);
+
 }

@@ -13,6 +13,8 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private static final String UPLOAD_DIR = "uploads/covers/";
 
+    private static final String PDF_UPLOAD_DIR = "uploads/pdfs/";
+
     @Override
     public String uploadCoverImage(MultipartFile file) {
 
@@ -47,5 +49,36 @@ public class FileStorageServiceImpl implements FileStorageService {
             );
         }
 
+    }
+
+
+    @Override
+    public String uploadPdf(MultipartFile file) {
+
+        try {
+
+            Path uploadPath = Paths.get(PDF_UPLOAD_DIR);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String fileName =
+                    UUID.randomUUID() + "_" + file.getOriginalFilename();
+
+            Path filePath = uploadPath.resolve(fileName);
+
+            Files.copy(
+                    file.getInputStream(),
+                    filePath,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
+            return fileName;
+
+        } catch (IOException e) {
+
+            throw new RuntimeException("PDF upload failed");
+        }
     }
 }

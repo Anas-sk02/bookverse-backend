@@ -150,4 +150,21 @@ public class BookServiceImpl implements BookService {
 
         return "Cover image uploaded successfully";
     }
+
+
+    @Override
+    public String uploadPdf(Long bookId, MultipartFile file) {
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new BookNotFoundException("Book not found with id: " + bookId));
+
+        String fileName = fileStorageService.uploadPdf(file);
+
+        book.setPdfUrl(fileName);
+
+        bookRepository.save(book);
+
+        return "PDF uploaded successfully";
+    }
 }

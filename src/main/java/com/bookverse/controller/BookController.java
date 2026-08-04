@@ -16,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequestMapping("/books")
 public class BookController {
@@ -79,6 +82,14 @@ public class BookController {
             MultipartFile file){
 
         return bookService.uploadCoverImage(id,file);
+    }
+
+    @PostMapping("/{id}/pdf")
+    public String uploadPdf(
+            @PathVariable Long id,
+            @RequestParam("file") MultipartFile file) {
+
+        return bookService.uploadPdf(id, file);
     }
 
 }
