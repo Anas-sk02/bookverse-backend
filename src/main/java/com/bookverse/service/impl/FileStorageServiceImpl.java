@@ -109,4 +109,28 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Image not found");
         }
     }
+
+
+    @Override
+    public Resource downloadPdf(String fileName) {
+
+        try {
+
+            Path filePath = Paths.get(PDF_UPLOAD_DIR)
+                    .resolve(fileName)
+                    .normalize();
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return resource;
+            }
+
+            throw new RuntimeException("book not found");
+
+        } catch (MalformedURLException e) {
+
+            throw new RuntimeException("book not found");
+        }
+    }
 }

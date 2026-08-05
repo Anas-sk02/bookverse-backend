@@ -38,4 +38,6 @@ public interface BookService {
     String uploadPdf(Long bookId, MultipartFile file);
 
     ResponseEntity<Resource> downloadCoverImage(Long bookId);
+
+    ResponseEntity<Resource> downloadPdf(Long bookId);
 }

@@ -12,4 +12,6 @@ public interface FileStorageService {
 
     Resource downloadCoverImage(String fileName);
 
+    Resource downloadPdf(String fileName);
+
 }

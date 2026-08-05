@@ -102,4 +102,12 @@ public class BookController {
         return bookService.downloadCoverImage(id);
     }
 
+
+    @GetMapping("/{id}/pdf")
+    public ResponseEntity<Resource> downloadPdf(
+            @PathVariable Long id) {
+
+        return bookService.downloadPdf(id);
+    }
+
 }

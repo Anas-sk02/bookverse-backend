@@ -212,4 +212,25 @@ public class BookServiceImpl implements BookService {
 
         return MediaType.APPLICATION_OCTET_STREAM;
     }
+
+    @Override
+    public ResponseEntity<Resource> downloadPdf(Long bookId) {
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new BookNotFoundException(
+                                "Book not found with id: " + bookId
+                        ));
+
+        Resource resource =
+                fileStorageService.downloadPdf(book.getPdfUrl());
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + book.getPdfUrl() + "\""
+                )
+                .body(resource);
+    }
 }
