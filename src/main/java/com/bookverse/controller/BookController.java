@@ -16,8 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-
 import org.springframework.web.multipart.MultipartFile;
+
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/books")
@@ -90,6 +92,14 @@ public class BookController {
             @RequestParam("file") MultipartFile file) {
 
         return bookService.uploadPdf(id, file);
+    }
+
+
+    @GetMapping("/{id}/cover")
+    public ResponseEntity<Resource> downloadCoverImage(
+            @PathVariable Long id) {
+
+        return bookService.downloadCoverImage(id);
     }
 
 }

@@ -8,6 +8,11 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.UUID;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+
+import java.net.MalformedURLException;
+
 @Service
 public class FileStorageServiceImpl implements FileStorageService {
 
@@ -79,6 +84,29 @@ public class FileStorageServiceImpl implements FileStorageService {
         } catch (IOException e) {
 
             throw new RuntimeException("PDF upload failed");
+        }
+    }
+
+    @Override
+    public Resource downloadCoverImage(String fileName) {
+
+        try {
+
+            Path filePath = Paths.get(UPLOAD_DIR)
+                    .resolve(fileName)
+                    .normalize();
+
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists()) {
+                return resource;
+            }
+
+            throw new RuntimeException("Image not found");
+
+        } catch (MalformedURLException e) {
+
+            throw new RuntimeException("Image not found");
         }
     }
 }

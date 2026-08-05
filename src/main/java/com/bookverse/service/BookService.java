@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 
 
 public interface BookService {
@@ -34,4 +36,6 @@ public interface BookService {
     String uploadCoverImage(Long bookId, MultipartFile file);
 
     String uploadPdf(Long bookId, MultipartFile file);
+
+    ResponseEntity<Resource> downloadCoverImage(Long bookId);
 }

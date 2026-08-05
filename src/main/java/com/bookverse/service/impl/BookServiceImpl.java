@@ -28,6 +28,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.web.multipart.MultipartFile;
 import com.bookverse.service.FileStorageService;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
 @Service
 public class BookServiceImpl implements BookService {
 
@@ -166,5 +171,45 @@ public class BookServiceImpl implements BookService {
         bookRepository.save(book);
 
         return "PDF uploaded successfully";
+    }
+
+    @Override
+    public ResponseEntity<Resource> downloadCoverImage(Long bookId) {
+
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() ->
+                        new BookNotFoundException(
+                                "Book not found with id: " + bookId
+                        ));
+
+        Resource resource =
+                fileStorageService.downloadCoverImage(book.getCoverImage());
+
+        MediaType mediaType =
+                getMediaType(book.getCoverImage());
+
+        return ResponseEntity.ok()
+                .contentType(mediaType)
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + book.getCoverImage() + "\""
+                )
+                .body(resource);
+    }
+
+    private MediaType getMediaType(String fileName) {
+
+        String lowerCase = fileName.toLowerCase();
+
+        if (lowerCase.endsWith(".png")) {
+            return MediaType.IMAGE_PNG;
+        }
+
+        if (lowerCase.endsWith(".jpg")
+                || lowerCase.endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG;
+        }
+
+        return MediaType.APPLICATION_OCTET_STREAM;
     }
 }
