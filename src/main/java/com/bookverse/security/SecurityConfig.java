@@ -53,6 +53,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/books/**")
                         .hasAnyRole("USER", "ADMIN")
 
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/dashboard/**"
+                        ).hasRole("ADMIN")
+
                         .requestMatchers(HttpMethod.GET, "/authors/**")
                         .hasAnyRole("USER", "ADMIN")
 
